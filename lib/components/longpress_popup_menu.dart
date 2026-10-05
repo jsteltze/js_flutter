@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:js_flutter/components/popup_menu.dart';
+import 'package:js_flutter/utils/dialog_utils.dart';
 
 /// A simple long press popup menu.
-class LongPressPopupMenu<T> extends StatefulWidget {
+class LongPressPopupMenu extends StatefulWidget {
   /// The popup menu entries for the long press menu.
-  final List<PopupMenuEntry<T>> items;
-
-  /// ValueChanged callback with selected item in the long press menu.
-  /// Is null if menu closed without selection by clicking outside the menu.
-  final ValueChanged<T?> onSelected;
+  final List<DialogAction> items;
 
   /// The child that can be long pressed to activate the long press menu.
   final Widget child;
@@ -17,14 +15,13 @@ class LongPressPopupMenu<T> extends StatefulWidget {
     super.key,
     required this.child,
     required this.items,
-    required this.onSelected,
   });
 
   @override
-  State<StatefulWidget> createState() => _LongPressPopupMenuState<T>();
+  State<StatefulWidget> createState() => _LongPressPopupMenuState();
 }
 
-class _LongPressPopupMenuState<T> extends State<LongPressPopupMenu<T>> {
+class _LongPressPopupMenuState extends State<LongPressPopupMenu> {
   Offset _downPosition = const Offset(0, 0);
 
   @override
@@ -38,9 +35,9 @@ class _LongPressPopupMenuState<T> extends State<LongPressPopupMenu<T>> {
         final RenderBox? overlay =
             Overlay.of(context).context.findRenderObject() as RenderBox?;
         if (overlay != null) {
-          final T? value = await showMenu<T>(
+          final String? value = await showMenu<String>(
             context: context,
-            items: widget.items,
+            items: createPopupMenuItems(context, widget.items),
             position: RelativeRect.fromLTRB(
               _downPosition.dx,
               _downPosition.dy,
@@ -48,7 +45,14 @@ class _LongPressPopupMenuState<T> extends State<LongPressPopupMenu<T>> {
               overlay.size.height - _downPosition.dy,
             ),
           );
-          widget.onSelected(value);
+          if (value != null) {
+            for (var item in widget.items) {
+              if (item.title == value) {
+                item.onPressed?.call();
+                break;
+              }
+            }
+          }
         }
       },
       child: widget.child,

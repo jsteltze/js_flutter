@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DialogAction {
   final String title;
   final VoidCallback? onPressed;
-  final Icon? icon;
+  final IconData? icon;
   final bool isDestructive;
 
   DialogAction({
@@ -23,7 +23,7 @@ void openDialog(
     void Function(bool x),
   )
   child,
-  Icon? titleIcon,
+  IconData? titleIcon,
   DialogAction? mainAction,
   List<DialogAction>? secondaryActions,
   String? closeButtonTitle = 'Cancel',
@@ -39,7 +39,7 @@ void openDialog(
         builder: (context, setDialogState) {
           return AlertDialog(
             insetPadding: EdgeInsets.all(20),
-            icon: titleIcon,
+            icon: Icon(titleIcon),
             title: Text(
               title,
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
@@ -62,7 +62,7 @@ void openDialog(
                         : Theme.of(context).colorScheme.primary,
                   ),
                   label: Text(a.title),
-                  icon: a.icon,
+                  icon: Icon(a.icon),
                 ),
               ),
               if (mainAction != null)
@@ -81,7 +81,7 @@ void openDialog(
                         : Theme.of(context).colorScheme.onPrimary,
                   ),
                   label: Text(mainAction.title),
-                  icon: mainAction.icon,
+                  icon: mainAction.icon == null ? null : Icon(mainAction.icon),
                 ),
             ],
           );
