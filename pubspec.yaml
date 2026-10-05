@@ -1,7 +1,7 @@
 name: js_flutter
 description: "common flutter components/functions which can be used in multiple projects"
-version: 0.0.1
-homepage:
+version: 0.0.2
+homepage: https://github.com/jsteltze/js_flutter
 
 environment:
   sdk: ^3.13.4
@@ -10,12 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  url_launcher: ^6.3.2
   expandable_search_bar_plus: ^1.0.2
   intl: ^0.20.2
-  path_provider: ^2.1.1
   logger: ^2.6.2
+  path: ^1.9.0
+  path_provider: ^2.1.1
   permission_handler: ^12.0.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
