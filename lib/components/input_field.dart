@@ -44,13 +44,13 @@ class InputField extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'Input must not be empty!';
         }
-        if (inputType == TextInputType.number && int.tryParse(value) == null) {
+        if (inputType == .number && int.tryParse(value) == null) {
           return 'Invalid integer';
         }
         return null;
       },
       keyboardType: inputType,
-      inputFormatters: inputType == TextInputType.number
+      inputFormatters: inputType == .number
           ? [FilteringTextInputFormatter.digitsOnly]
           : [],
       decoration: InputDecoration(

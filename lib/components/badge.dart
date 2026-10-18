@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum BadgeVariant { secondary, tertiary }
+enum BadgeVariant { secondary, tertiary, outline }
 
 class MyBadge extends StatelessWidget {
   final String text;
@@ -14,50 +14,71 @@ class MyBadge extends StatelessWidget {
     this.icon,
     BadgeVariant? variant,
     super.key,
-  }) : variant = variant ?? BadgeVariant.secondary;
+  }) : variant = variant ?? .secondary;
 
   @override
   Widget build(BuildContext context) {
-    TextStyle style = variant == BadgeVariant.secondary
-        ? Theme.of(context).textTheme.bodySmall!.copyWith(
-            color: Theme.of(context).colorScheme.onSecondaryContainer,
-          )
-        : TextStyle(color: Theme.of(context).colorScheme.onTertiaryContainer);
-    Widget widget = icon == null
+    widget(TextStyle st) => icon == null
         ? Stack(
-            alignment: Alignment.center,
+            alignment: .center,
             children: [
               Icon(null, applyTextScaling: true),
-              child ?? Text(text, style: style),
+              child ?? Text(text, style: st),
             ],
           )
         : Row(
             spacing: 5,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               ?icon,
-              child ?? Text(text, style: style),
+              child ?? Text(text, style: st),
             ],
           );
 
-    return variant == BadgeVariant.secondary
-        ? Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondaryContainer
-                  .withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(4),
+    switch (variant) {
+      case .secondary:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondaryContainer
+                .withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: widget(
+            Theme.of(context).textTheme.bodySmall!
+                .copyWith(color: Theme.of(context).colorScheme.secondary),
+          ),
+        );
+      case .tertiary:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.tertiaryContainer
+                .withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(4),
+            border: BoxBorder.all(
+              width: 0.5,
+              color: Theme.of(context).colorScheme.tertiary.withAlpha(70),
             ),
-            child: widget,
-          )
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.tertiaryContainer
-                  .withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(4),
+          ),
+          child: widget(
+            TextStyle(color: Theme.of(context).colorScheme.onTertiaryContainer),
+          ),
+        );
+      case .outline:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: BoxBorder.all(
+              color: Theme.of(context).colorScheme.outline.withAlpha(70),
             ),
-            child: widget,
-          );
+          ),
+          child: widget(
+            Theme.of(context).textTheme.titleSmall!
+                .copyWith(color: Theme.of(context).colorScheme.secondary),
+          ),
+        );
+    }
   }
 }

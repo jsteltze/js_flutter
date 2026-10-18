@@ -20,7 +20,7 @@ Scaffold createScaffold({
         child: Image.asset(appIconPath),
       ),
       title: FittedBox(
-        fit: BoxFit.fitWidth,
+        fit: .fitWidth,
         child: Text(Globals.packageInfo.appName),
       ),
       actions: actions,
@@ -40,11 +40,11 @@ MaterialApp createApp(String appTitle, Widget child) {
     darkTheme: ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.deepPurple,
-        brightness: Brightness.dark,
+        brightness: .dark,
       ),
       useMaterial3: true,
     ),
-    themeMode: ThemeMode.system,
+    themeMode: .system,
     home: child,
   );
 }

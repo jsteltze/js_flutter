@@ -27,7 +27,7 @@ class _LongPressPopupMenuState extends State<LongPressPopupMenu> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+      behavior: .translucent,
       onTapDown: (TapDownDetails details) {
         _downPosition = details.globalPosition;
       },

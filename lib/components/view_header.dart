@@ -14,7 +14,7 @@ class ViewHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(100),
         border: BoxBorder.symmetric(
-          vertical: BorderSide.none,
+          vertical: .none,
           horizontal: BorderSide(color: Theme.of(context).colorScheme.outline),
         ),
       ),

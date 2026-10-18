@@ -23,7 +23,7 @@ class DialogAction {
 
 void openDialog(
   BuildContext context, {
-  required String title,
+  String? title,
   required Widget Function(
     BuildContext,
     void Function(void Function()),
@@ -47,10 +47,14 @@ void openDialog(
           return AlertDialog(
             insetPadding: EdgeInsets.all(20),
             icon: Icon(titleIcon),
-            title: Text(
-              title,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
+            title: title != null
+                ? Text(
+                    title,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : null,
             content: SingleChildScrollView(
               child: child(context, setDialogState, toggleMainAction),
             ),
@@ -147,7 +151,7 @@ void showErrorDialog(BuildContext context, String msg) {
     title: 'Error',
     titleIcon: Icons.error_outline,
     child: (ctx, setDialogState, toggleMainAction) => Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [const Text('An error occurred:'), Warning(msg)],
     ),
     closeButtonTitle: 'Close',
@@ -164,11 +168,11 @@ void showWelcomeDialog(
     title: 'Welcome!',
     titleIcon: titleIcon,
     child: (ctx, setDialogState, toggleMainAction) => Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         const Image(image: AssetImage('assets/app_logo.png'), height: 100),
         const SizedBox(height: 20),
-        Text(message, textAlign: TextAlign.center),
+        Text(message, textAlign: .center),
       ],
     ),
     mainAction: DialogAction(

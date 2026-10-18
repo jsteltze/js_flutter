@@ -26,30 +26,29 @@ class _DescriptionState extends State<Description> {
       final foldIndex = widget.text.indexOf(' ', widget.expandChars);
       final shortText = '${widget.text.substring(0, foldIndex)}...';
       return SizedBox(
-        width: double.maxFinite,
+        width: .maxFinite,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             AnimatedSize(
               curve: Curves.easeInOut,
-              alignment: Alignment.topLeft,
+              alignment: .topLeft,
               duration: Duration(milliseconds: 500),
               child: Text(
                 _isExpanded ? widget.text : shortText,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+                textAlign: .start,
+                style: Theme.of(context).textTheme.bodySmall!
+                    .copyWith(color: Theme.of(context).colorScheme.secondary),
               ),
             ),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: .centerRight,
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
                   minimumSize: Size(50, 15),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  alignment: Alignment.centerLeft,
+                  tapTargetSize: .shrinkWrap,
+                  alignment: .centerLeft,
                   textStyle: Theme.of(context).textTheme.bodySmall,
                 ),
                 onPressed: () {
@@ -58,7 +57,7 @@ class _DescriptionState extends State<Description> {
                   });
                 },
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: .min,
                   children: [
                     Icon(
                       _isExpanded
@@ -76,9 +75,8 @@ class _DescriptionState extends State<Description> {
     } else {
       return Text(
         widget.text,
-        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-          color: Theme.of(context).colorScheme.secondary,
-        ),
+        style: Theme.of(context).textTheme.bodySmall!
+            .copyWith(color: Theme.of(context).colorScheme.secondary),
       );
     }
   }
