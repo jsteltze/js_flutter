@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:js_flutter/utils/snackbar_utils.dart';
+import 'package:js_flutter/utils/timestampx.dart';
+
+import '../components/warning.dart';
+import '../icons.dart';
+import 'export_handler.dart';
+import 'logger.dart';
 
 class DialogAction {
   final String title;
@@ -88,5 +95,86 @@ void openDialog(
         },
       );
     },
+  );
+}
+
+void showLogsDialog(BuildContext context) {
+  final logs = FileLogger.getLogs();
+  openDialog(
+    context,
+    title: 'Logs',
+    titleIcon: Icons.list_alt,
+    child: (ctx, setDialogState, toggleMainAction) => Text(
+      logs,
+      style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
+    ),
+    closeButtonTitle: null,
+    mainAction: DialogAction(
+      title: 'Close',
+      onPressed: () => Navigator.pop(context),
+    ),
+    secondaryActions: [
+      DialogAction(
+        title: 'Export',
+        onPressed: () {
+          final filename = 'logs-${DateTime.now().toTechString()}.txt';
+          ExportHandler.exportToDownloads(
+            context,
+            filename,
+            logs,
+            () => Navigator.pop(context),
+          );
+        },
+        icon: exportIcon,
+      ),
+      DialogAction(
+        title: 'Clear',
+        onPressed: () {
+          FileLogger.clearLogs();
+          showSnackbar(context, 'Logs removed');
+          Navigator.pop(context);
+        },
+        isDestructive: true,
+        icon: deleteIcon,
+      ),
+    ],
+  );
+}
+
+void showErrorDialog(BuildContext context, String msg) {
+  openDialog(
+    context,
+    title: 'Error',
+    titleIcon: Icons.error_outline,
+    child: (ctx, setDialogState, toggleMainAction) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [const Text('An error occurred:'), Warning(msg)],
+    ),
+    closeButtonTitle: 'Close',
+  );
+}
+
+void showWelcomeDialog(
+  BuildContext context,
+  IconData? titleIcon,
+  String message,
+) {
+  openDialog(
+    context,
+    title: 'Welcome!',
+    titleIcon: titleIcon,
+    child: (ctx, setDialogState, toggleMainAction) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Image(image: AssetImage('assets/app_logo.png'), height: 100),
+        const SizedBox(height: 20),
+        Text(message, textAlign: TextAlign.center),
+      ],
+    ),
+    mainAction: DialogAction(
+      title: 'Get Started',
+      onPressed: () => Navigator.pop(context),
+    ),
+    closeButtonTitle: null,
   );
 }
