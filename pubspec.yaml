@@ -1,6 +1,6 @@
 name: js_flutter
 description: "common flutter components/functions which can be used in multiple projects"
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/jsteltze/js_flutter
 
 environment:
@@ -15,14 +15,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^2.0.0
   expandable_search_bar_plus: ^1.0.2
+  file_saver: ^0.7.0
   intl: ^0.20.2
   logger: ^2.6.2
+  package_info_plus: ^10.2.2
   path: ^1.9.0
   path_provider: ^2.1.1
   permission_handler: ^13.0.2
-  url_launcher: ^6.3.2
-  package_info_plus: ^10.2.2
   shared_preferences: ^2.5.6
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
