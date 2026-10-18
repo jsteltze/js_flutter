@@ -5,4 +5,6 @@ extension TimestampX on DateTime {
       '${DateFormat.yMMMd().format(this)}, ${DateFormat.Hm().format(this)}';
 
   String toTechString() => DateFormat('yyyyMMdd_HHmmss').format(this);
+
+  String toMMMMYYYY() => DateFormat('MMMM yyyy').format(this);
 }
