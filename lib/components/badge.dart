@@ -51,7 +51,7 @@ class MyBadge extends StatelessWidget {
         );
       case .tertiary:
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.tertiaryContainer
                 .withValues(alpha: 0.6),
