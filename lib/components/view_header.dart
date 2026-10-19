@@ -5,11 +5,13 @@ class ViewHeader extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const ViewHeader(this.header, {EdgeInsetsGeometry? padding, super.key})
-    : padding = padding ?? const EdgeInsets.only(left: 16.0);
+    : padding =
+          padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: .infinity,
       padding: padding,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(100),
