@@ -7,22 +7,24 @@ class MyBadge extends StatelessWidget {
   final Widget? child;
   final Icon? icon;
   final BadgeVariant variant;
+  final Color? background;
 
   const MyBadge(
     this.text, {
     this.child,
     this.icon,
+    this.background,
     BadgeVariant? variant,
     super.key,
   }) : variant = variant ?? .secondary;
 
   @override
   Widget build(BuildContext context) {
-    widget(TextStyle st) => icon == null
+    widget(TextStyle st) => icon == null || icon!.icon == null
         ? Stack(
             alignment: .center,
             children: [
-              Icon(null, applyTextScaling: true),
+              icon ?? Icon(null, applyTextScaling: true),
               child ?? Text(text, style: st),
             ],
           )
@@ -40,8 +42,10 @@ class MyBadge extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondaryContainer
-                .withValues(alpha: 0.6),
+            color:
+                background ??
+                Theme.of(context).colorScheme.secondaryContainer
+                    .withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(4),
           ),
           child: widget(
@@ -53,8 +57,10 @@ class MyBadge extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiaryContainer
-                .withValues(alpha: 0.6),
+            color:
+                background ??
+                Theme.of(context).colorScheme.tertiaryContainer
+                    .withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(4),
             border: BoxBorder.all(
               width: 0.5,
@@ -71,7 +77,9 @@ class MyBadge extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: BoxBorder.all(
-              color: Theme.of(context).colorScheme.outline.withAlpha(70),
+              color:
+                  background ??
+                  Theme.of(context).colorScheme.outline.withAlpha(70),
             ),
           ),
           child: widget(
