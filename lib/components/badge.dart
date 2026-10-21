@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum BadgeVariant { secondary, tertiary, outline }
+enum BadgeVariant { secondary, tertiary, outline, ghost }
 
 class MyBadge extends StatelessWidget {
   final String text;
@@ -78,6 +78,11 @@ class MyBadge extends StatelessWidget {
             Theme.of(context).textTheme.titleSmall!
                 .copyWith(color: Theme.of(context).colorScheme.secondary),
           ),
+        );
+      case .ghost:
+        return widget(
+          Theme.of(context).textTheme.bodySmall!
+              .copyWith(color: Theme.of(context).colorScheme.secondary),
         );
     }
   }
