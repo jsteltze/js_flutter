@@ -24,11 +24,13 @@ class NumberCard extends StatefulWidget {
 
 class _NumberCardState extends State<NumberCard>
     with SingleTickerProviderStateMixin {
+  static final animationDuration = Duration(milliseconds: 300);
+
   AnimationController? _controller;
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    _controller = AnimationController(duration: animationDuration, vsync: this);
     _controller?.forward();
     super.initState();
   }
@@ -59,7 +61,7 @@ class _NumberCardState extends State<NumberCard>
           borderRadius: BorderRadius.circular(10),
         ),
         child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
+          duration: animationDuration,
           transitionBuilder: (child, animation) {
             return FadeTransition(
               opacity: animation,
