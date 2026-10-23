@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 enum NumberCardVariant { green }
 
-class NumberCard2 extends StatefulWidget {
+class NumberCard extends StatefulWidget {
   final String label;
   final String content;
   final bool isExpanded;
   final Icon? icon;
   final NumberCardVariant? variant;
 
-  const NumberCard2(
+  const NumberCard(
     this.content, {
     required this.label,
     required this.isExpanded,
@@ -19,10 +19,10 @@ class NumberCard2 extends StatefulWidget {
   });
 
   @override
-  State<NumberCard2> createState() => _NumberCardState();
+  State<NumberCard> createState() => _NumberCardState();
 }
 
-class _NumberCardState extends State<NumberCard2>
+class _NumberCardState extends State<NumberCard>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
 
@@ -34,7 +34,7 @@ class _NumberCardState extends State<NumberCard2>
   }
 
   @override
-  void didUpdateWidget(NumberCard2 oldWidget) {
+  void didUpdateWidget(NumberCard oldWidget) {
     _controller?.reset();
     _controller?.forward();
     super.didUpdateWidget(oldWidget);
