@@ -30,6 +30,7 @@ void openDialog(
     void Function(bool x),
   )
   child,
+  bool? maxWidth = false,
   IconData? titleIcon,
   DialogAction? mainAction,
   List<DialogAction>? secondaryActions,
@@ -55,8 +56,11 @@ void openDialog(
                     ),
                   )
                 : null,
-            content: SingleChildScrollView(
-              child: child(context, setDialogState, toggleMainAction),
+            content: SizedBox(
+              width: maxWidth! ? MediaQuery.of(context).size.width : null,
+              child: SingleChildScrollView(
+                child: child(context, setDialogState, toggleMainAction),
+              ),
             ),
             actions: <Widget>[
               if (closeButtonTitle != null)

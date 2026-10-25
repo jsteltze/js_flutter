@@ -25,7 +25,7 @@ class MyBadge extends StatelessWidget {
             alignment: .center,
             children: [
               icon ?? Icon(null, applyTextScaling: true),
-              child ?? Text(text, style: st),
+              child ?? Text(text, style: st, maxLines: 1, overflow: .ellipsis),
             ],
           )
         : Row(
@@ -33,7 +33,15 @@ class MyBadge extends StatelessWidget {
             mainAxisSize: .min,
             children: [
               ?icon,
-              child ?? Text(text, style: st),
+              child ??
+                  Flexible(
+                    child: Text(
+                      text,
+                      style: st,
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                    ),
+                  ),
             ],
           );
 
