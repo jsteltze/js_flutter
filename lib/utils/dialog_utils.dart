@@ -7,6 +7,13 @@ import '../icons.dart';
 import 'export_handler.dart';
 import 'logger.dart';
 
+/// 400 seems to be a good width for formular dialogs.
+/// Using the maximum device width can result in ridiculously large dialogs
+/// especially on big screens in landscape mode. That's why a fixed
+/// width seems reasonable. Flutter automatically downsizes if the device
+/// width is not sufficient.
+final double defaultFormularDialogWidth = 400.0;
+
 class DialogAction {
   final String title;
   final VoidCallback? onPressed;
@@ -30,7 +37,7 @@ void openDialog(
     void Function(bool x),
   )
   child,
-  bool? maxWidth = false,
+  double? width,
   IconData? titleIcon,
   DialogAction? mainAction,
   List<DialogAction>? secondaryActions,
@@ -44,63 +51,61 @@ void openDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
-        builder: (context, setDialogState) {
-          return AlertDialog(
-            insetPadding: EdgeInsets.all(20),
-            icon: Icon(titleIcon),
-            title: title != null
-                ? Text(
-                    title,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  )
-                : null,
-            content: SizedBox(
-              width: maxWidth! ? MediaQuery.of(context).size.width : null,
-              child: SingleChildScrollView(
-                child: child(context, setDialogState, toggleMainAction),
+        builder: (context, setDialogState) => AlertDialog(
+          insetPadding: EdgeInsets.all(20),
+          icon: Icon(titleIcon),
+          title: title != null
+              ? Text(
+                  title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                )
+              : null,
+          content: SizedBox(
+            width: width,
+            child: SingleChildScrollView(
+              child: child(context, setDialogState, toggleMainAction),
+            ),
+          ),
+          actions: <Widget>[
+            if (closeButtonTitle != null)
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(closeButtonTitle),
+              ),
+            ...?secondaryActions?.map(
+              (a) => TextButton.icon(
+                onPressed: a.onPressed,
+                style: TextButton.styleFrom(
+                  foregroundColor: a.isDestructive
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.primary,
+                ),
+                label: Text(a.title),
+                icon: Icon(a.icon),
               ),
             ),
-            actions: <Widget>[
-              if (closeButtonTitle != null)
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(closeButtonTitle),
+            if (mainAction != null)
+              ElevatedButton.icon(
+                onPressed: mainActionIsEnabled ? mainAction.onPressed : null,
+                style: TextButton.styleFrom(
+                  backgroundColor: mainAction.isDestructive
+                      ? Theme.of(context).colorScheme.errorContainer
+                      : Theme.of(context).colorScheme.primary.withAlpha(
+                          mainAction.onPressed == null || !mainActionIsEnabled
+                              ? 30
+                              : 255,
+                        ),
+                  foregroundColor: mainAction.isDestructive
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.onPrimary,
                 ),
-              ...?secondaryActions?.map(
-                (a) => TextButton.icon(
-                  onPressed: a.onPressed,
-                  style: TextButton.styleFrom(
-                    foregroundColor: a.isDestructive
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.primary,
-                  ),
-                  label: Text(a.title),
-                  icon: Icon(a.icon),
-                ),
+                label: Text(mainAction.title),
+                icon: mainAction.icon == null ? null : Icon(mainAction.icon),
               ),
-              if (mainAction != null)
-                ElevatedButton.icon(
-                  onPressed: mainActionIsEnabled ? mainAction.onPressed : null,
-                  style: TextButton.styleFrom(
-                    backgroundColor: mainAction.isDestructive
-                        ? Theme.of(context).colorScheme.errorContainer
-                        : Theme.of(context).colorScheme.primary.withAlpha(
-                            mainAction.onPressed == null || !mainActionIsEnabled
-                                ? 30
-                                : 255,
-                          ),
-                    foregroundColor: mainAction.isDestructive
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  label: Text(mainAction.title),
-                  icon: mainAction.icon == null ? null : Icon(mainAction.icon),
-                ),
-            ],
-          );
-        },
+          ],
+        ),
       );
     },
   );
