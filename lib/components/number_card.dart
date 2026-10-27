@@ -73,36 +73,34 @@ class _NumberCardState extends State<NumberCard>
             );
           },
           child: widget.isExpanded
-              ? Flexible(
-                  child: Column(
-                    key: ValueKey<int>(1),
-                    spacing: 5,
-                    mainAxisAlignment: .start,
-                    crossAxisAlignment: .start,
-                    mainAxisSize: .max,
-                    children: [
-                      ?widget.icon,
-                      Text(
-                        widget.label,
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: widget.variant == .green
-                              ? Colors.green
-                              : Theme.of(context).colorScheme.primary,
-                        ),
+              ? Column(
+                  key: ValueKey<int>(1),
+                  spacing: 5,
+                  mainAxisAlignment: .start,
+                  crossAxisAlignment: .start,
+                  mainAxisSize: .max,
+                  children: [
+                    ?widget.icon,
+                    Text(
+                      widget.label,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: widget.variant == .green
+                            ? Colors.green
+                            : Theme.of(context).colorScheme.primary,
                       ),
-                      Spacer(),
-                      Text(
-                        widget.content,
-                        style: Theme.of(context).textTheme.headlineLarge!
-                            .copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: widget.variant == .green
-                                  ? Colors.green
-                                  : Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    Text(
+                      widget.content,
+                      style: Theme.of(context).textTheme.headlineLarge!
+                          .copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: widget.variant == .green
+                                ? Colors.green
+                                : Theme.of(context).colorScheme.primary,
+                          ),
+                    ),
+                  ],
                 )
               : Row(
                   key: ValueKey<int>(0),
