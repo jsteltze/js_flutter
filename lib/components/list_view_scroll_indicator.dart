@@ -20,6 +20,7 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
 
   @override
   Widget build(BuildContext context) {
+    final ratio = widget.child.scrollDirection == .horizontal ? 0.15 : 0.05;
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         setState(() {
@@ -40,10 +41,10 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
           ShaderMask(
             shaderCallback: (Rect rect) {
               return LinearGradient(
-                begin: widget.child.scrollDirection == Axis.horizontal
+                begin: widget.child.scrollDirection == .horizontal
                     ? Alignment.centerLeft
                     : Alignment.topCenter,
-                end: widget.child.scrollDirection == Axis.horizontal
+                end: widget.child.scrollDirection == .horizontal
                     ? Alignment.centerRight
                     : Alignment.bottomCenter,
                 colors: const [
@@ -53,21 +54,21 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
                   Colors.black,
                 ],
                 stops: widget.child.reverse
-                    ? [0.0, 0.15 * _stopEnd, 1 - 0.15 * _stopStart, 1.0]
-                    : [0.0, 0.15 * _stopStart, 1 - 0.15 * _stopEnd, 1.0],
+                    ? [0.0, ratio * _stopEnd, 1 - ratio * _stopStart, 1.0]
+                    : [0.0, ratio * _stopStart, 1 - ratio * _stopEnd, 1.0],
               ).createShader(rect);
             },
             blendMode: BlendMode.dstOut,
             child: Padding(
               padding: EdgeInsetsGeometry.symmetric(
-                horizontal: widget.child.scrollDirection == Axis.horizontal
+                horizontal: widget.child.scrollDirection == .horizontal
                     ? 10
                     : 0,
               ),
               child: widget.child,
             ),
           ),
-          widget.child.scrollDirection == Axis.horizontal
+          widget.child.scrollDirection == .horizontal
               ? Row(
                   mainAxisAlignment: .spaceBetween,
                   children: [
