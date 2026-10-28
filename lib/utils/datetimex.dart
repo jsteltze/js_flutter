@@ -1,12 +1,27 @@
 import 'package:intl/intl.dart';
 
-extension TimestampX on DateTime {
+extension DateTimeX on DateTime {
   String toHumanString() =>
       '${DateFormat.yMMMd().format(this)}, ${DateFormat.Hm().format(this)}';
 
   String toTechString() => DateFormat('yyyyMMdd_HHmmss').format(this);
 
   String toMMMMYYYY() => DateFormat('MMMM yyyy').format(this);
+
+  String toHumanDate() => DateFormat.yMMMd().format(this);
+
+  String toDayDiff() {
+    int diff = DateTime.now().difference(this).inDays;
+    if (diff == 0) {
+      return 'today';
+    } else if (diff == 1) {
+      return 'yesterday';
+    } else if (diff < 0) {
+      return 'in $diff days';
+    } else {
+      return '$diff days ago';
+    }
+  }
 
   String dateSpan(DateTime? other) {
     if (other == null) {
