@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:js_flutter/utils/datetimex.dart';
 import 'package:js_flutter/utils/snackbar_utils.dart';
-import 'package:js_flutter/utils/timestampx.dart';
 
 import '../components/warning.dart';
 import '../icons.dart';
@@ -16,7 +16,7 @@ final double defaultFormularDialogWidth = 400.0;
 
 class DialogAction {
   final String title;
-  final VoidCallback? onPressed;
+  final Function(void Function(void Function())?)? onPressed;
   final IconData? icon;
   final bool isDestructive;
 
@@ -76,7 +76,7 @@ void openDialog(
               ),
             ...?secondaryActions?.map(
               (a) => TextButton.icon(
-                onPressed: a.onPressed,
+                onPressed: () => a.onPressed?.call(setDialogState),
                 style: TextButton.styleFrom(
                   foregroundColor: a.isDestructive
                       ? Theme.of(context).colorScheme.error
@@ -88,7 +88,9 @@ void openDialog(
             ),
             if (mainAction != null)
               ElevatedButton.icon(
-                onPressed: mainActionIsEnabled ? mainAction.onPressed : null,
+                onPressed: mainActionIsEnabled
+                    ? () => mainAction.onPressed?.call(setDialogState)
+                    : null,
                 style: TextButton.styleFrom(
                   backgroundColor: mainAction.isDestructive
                       ? Theme.of(context).colorScheme.errorContainer
@@ -124,12 +126,12 @@ void showLogsDialog(BuildContext context) {
     closeButtonTitle: null,
     mainAction: DialogAction(
       title: 'Close',
-      onPressed: () => Navigator.pop(context),
+      onPressed: (_) => Navigator.pop(context),
     ),
     secondaryActions: [
       DialogAction(
         title: 'Export',
-        onPressed: () {
+        onPressed: (_) {
           final filename = 'logs-${DateTime.now().toTechString()}.txt';
           ExportHandler.exportToDownloads(
             context,
@@ -142,7 +144,7 @@ void showLogsDialog(BuildContext context) {
       ),
       DialogAction(
         title: 'Clear',
-        onPressed: () {
+        onPressed: (_) {
           FileLogger.clearLogs();
           showSnackbar(context, 'Logs removed');
           Navigator.pop(context);
@@ -186,7 +188,7 @@ void showWelcomeDialog(
     ),
     mainAction: DialogAction(
       title: 'Get Started',
-      onPressed: () => Navigator.pop(context),
+      onPressed: (_) => Navigator.pop(context),
     ),
     closeButtonTitle: null,
   );

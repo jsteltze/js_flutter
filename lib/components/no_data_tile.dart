@@ -32,7 +32,7 @@ class NoDataTile extends StatelessWidget {
           const SizedBox(height: 8),
           if (actionButton != null)
             TextButton(
-              onPressed: actionButton!.onPressed,
+              onPressed: actionButton!.onPressed?.call(null),
               child: Text(actionButton!.title),
             ),
         ],

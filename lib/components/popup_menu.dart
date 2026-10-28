@@ -43,7 +43,7 @@ PopupMenuButton<String> createPopupMenu(List<DialogAction> items) {
     onSelected: (value) {
       for (var item in items) {
         if (item.title == value) {
-          item.onPressed?.call();
+          item.onPressed?.call(null);
           break;
         }
       }
