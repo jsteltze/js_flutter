@@ -8,9 +8,11 @@ class ListViewScrollIndicator extends StatefulWidget {
   const ListViewScrollIndicator({
     required this.child,
     this.scrollDirection = .vertical,
+    this.controller,
     super.key,
   });
 
+  final ScrollController? controller;
   final Axis scrollDirection;
   final Widget child;
 
@@ -22,10 +24,20 @@ class ListViewScrollIndicator extends StatefulWidget {
 class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
   double _stopStart = 0;
   double _stopEnd = 1;
+  bool _showNextIcon = false;
 
   @override
   Widget build(BuildContext context) {
-    final ratio = widget.child.scrollDirection == .horizontal ? 0.15 : 0.05;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      double? maxScroll2 = widget.controller?.position.maxScrollExtent;
+      if (maxScroll2 != null && maxScroll2 > 0 && !_showNextIcon) {
+        setState(() {
+          _showNextIcon = true;
+        });
+      }
+    });
+
+    final ratio = widget.scrollDirection == .horizontal ? 0.15 : 0.05;
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         setState(() {
@@ -37,6 +49,7 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
 
           _stopStart = _stopStart.clamp(0.0, 1.0);
           _stopEnd = _stopEnd.clamp(0.0, 1.0);
+          _showNextIcon = _stopEnd == 1;
         });
         return true;
       },
@@ -79,7 +92,7 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
                           .withAlpha(100),
                     ),
                     Icon(
-                      _stopEnd > 0 ? Icons.navigate_next : null,
+                      _showNextIcon ? Icons.navigate_next : null,
                       color: Theme.of(context).colorScheme.outline
                           .withAlpha(100),
                     ),
@@ -94,7 +107,7 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
                           .withAlpha(100),
                     ),
                     Icon(
-                      _stopEnd > 0 ? Icons.keyboard_arrow_down : null,
+                      _showNextIcon ? Icons.keyboard_arrow_down : null,
                       color: Theme.of(context).colorScheme.outline
                           .withAlpha(100),
                     ),
