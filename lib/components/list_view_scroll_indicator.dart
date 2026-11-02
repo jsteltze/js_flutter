@@ -27,7 +27,8 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
   bool _showNextIcon = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       double? maxScroll2 = widget.controller?.position.maxScrollExtent;
       if (maxScroll2 != null && maxScroll2 > 0 && !_showNextIcon) {
@@ -36,7 +37,10 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
         });
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final ratio = widget.scrollDirection == .horizontal ? 0.15 : 0.05;
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
