@@ -5,9 +5,14 @@
 import 'package:flutter/material.dart';
 
 class ListViewScrollIndicator extends StatefulWidget {
-  const ListViewScrollIndicator({required this.child, super.key});
+  const ListViewScrollIndicator({
+    required this.child,
+    this.scrollDirection = .vertical,
+    super.key,
+  });
 
-  final ListView child;
+  final Axis scrollDirection;
+  final Widget child;
 
   @override
   State<ListViewScrollIndicator> createState() =>
@@ -41,10 +46,10 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
           ShaderMask(
             shaderCallback: (Rect rect) {
               return LinearGradient(
-                begin: widget.child.scrollDirection == .horizontal
+                begin: widget.scrollDirection == .horizontal
                     ? Alignment.centerLeft
                     : Alignment.topCenter,
-                end: widget.child.scrollDirection == .horizontal
+                end: widget.scrollDirection == .horizontal
                     ? Alignment.centerRight
                     : Alignment.bottomCenter,
                 colors: const [
@@ -53,22 +58,18 @@ class _ListViewScrollIndicatorState extends State<ListViewScrollIndicator> {
                   Colors.transparent,
                   Colors.black,
                 ],
-                stops: widget.child.reverse
-                    ? [0.0, ratio * _stopEnd, 1 - ratio * _stopStart, 1.0]
-                    : [0.0, ratio * _stopStart, 1 - ratio * _stopEnd, 1.0],
+                stops: [0.0, ratio * _stopStart, 1 - ratio * _stopEnd, 1.0],
               ).createShader(rect);
             },
             blendMode: BlendMode.dstOut,
             child: Padding(
               padding: EdgeInsetsGeometry.symmetric(
-                horizontal: widget.child.scrollDirection == .horizontal
-                    ? 10
-                    : 0,
+                horizontal: widget.scrollDirection == .horizontal ? 10 : 0,
               ),
               child: widget.child,
             ),
           ),
-          widget.child.scrollDirection == .horizontal
+          widget.scrollDirection == .horizontal
               ? Row(
                   mainAxisAlignment: .spaceBetween,
                   children: [
