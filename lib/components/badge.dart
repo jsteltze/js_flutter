@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-enum BadgeVariant { secondary, tertiary, outline, ghost }
+enum BadgeVariant { primary, secondary, tertiary, outline, ghost }
 
 class MyBadge extends StatelessWidget {
   final String text;
@@ -46,6 +46,20 @@ class MyBadge extends StatelessWidget {
           );
 
     switch (variant) {
+      case .primary:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color:
+                background ??
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: widget(
+            Theme.of(context).textTheme.bodyMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          ),
+        );
       case .secondary:
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
