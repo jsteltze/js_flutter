@@ -47,8 +47,6 @@ class MyList<T> extends StatefulWidget {
 class MyListState<T> extends State<MyList<T>> {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
-  // TODO braucht es die _filtered überhaupt?
-  List<T> _filtered = [];
   List<T> _currentlyListed = [];
   bool _showNoDataView = false;
 
@@ -74,7 +72,6 @@ class MyListState<T> extends State<MyList<T>> {
       }
 
       setState(() {
-        _filtered = filtered.toList();
         _currentlyListed = filtered.toList();
       });
 
@@ -112,7 +109,6 @@ class MyListState<T> extends State<MyList<T>> {
     if (mounted) {
       setState(() {
         _currentlyListed[editIndex] = x;
-        _filtered[editIndex] = x;
       });
     }
   }
@@ -144,14 +140,13 @@ class MyListState<T> extends State<MyList<T>> {
     super.initState();
     setState(() {
       _currentlyListed = widget.initialItems.toList();
-      _filtered = widget.initialItems.toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     ScrollController controller = ScrollController();
-    return _filtered.isEmpty && _showNoDataView
+    return _currentlyListed.isEmpty && _showNoDataView
         ? widget.noDataTile
         : ListViewScrollIndicator(
             controller: controller,
