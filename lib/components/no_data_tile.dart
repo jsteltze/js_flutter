@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:js_flutter/utils/dialog_utils.dart';
+import 'package:material_ui/material_ui.dart';
 
 class NoDataTile extends StatelessWidget {
   final String text;

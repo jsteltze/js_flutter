@@ -1,11 +1,15 @@
 import 'package:expandable_search_bar_plus/expandable_search_bar_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SearchField extends StatefulWidget {
   final Function(String) onSearch;
   final String placeholder;
 
-  const SearchField({super.key, required this.onSearch, this.placeholder = 'Search ...'});
+  const SearchField({
+    super.key,
+    required this.onSearch,
+    this.placeholder = 'Search ...',
+  });
 
   @override
   State<SearchField> createState() => _SearchFieldState();

@@ -2,7 +2,7 @@
 // Posted by raphaelDev, modified by community. See post 'Timeline' for change history
 // Retrieved 2026-10-26, License - CC BY-SA 4.0
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ListViewScrollIndicator extends StatefulWidget {
   const ListViewScrollIndicator({

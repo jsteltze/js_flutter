@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:js_flutter/components/popup_menu.dart';
 import 'package:js_flutter/utils/dialog_utils.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A simple long press popup menu.
 class LongPressPopupMenu extends StatefulWidget {
