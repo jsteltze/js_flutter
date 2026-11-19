@@ -1,10 +1,10 @@
 name: js_flutter
 description: "common flutter components/functions which can be used in multiple projects"
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/jsteltze/js_flutter
 
 environment:
-  sdk: ^3.13.4
+  sdk: ^3.13.7
   flutter: ">=1.17.0"
 
 dependencies:

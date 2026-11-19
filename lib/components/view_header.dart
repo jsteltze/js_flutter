@@ -14,10 +14,11 @@ class ViewHeader extends StatelessWidget {
       width: .infinity,
       padding: padding,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(100),
-        border: BoxBorder.fromLTRB(
-          bottom: BorderSide(color: Theme.of(context).colorScheme.outline),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        border: BoxBorder.symmetric(
+          horizontal: BorderSide(color: Theme.of(context).colorScheme.outline),
         ),
+        borderRadius: .vertical(bottom: .circular(20)),
       ),
       child: header,
     );
