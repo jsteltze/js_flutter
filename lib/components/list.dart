@@ -1,3 +1,4 @@
+import 'package:js_flutter/icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'list_view_scroll_indicator.dart';
@@ -5,6 +6,7 @@ import 'list_view_scroll_indicator.dart';
 class MyList<T> extends StatefulWidget {
   final List<T> initialItems;
   final Widget Function(T, Animation<double>) itemBuilder;
+  final void Function(T, DismissDirection)? onDismissed;
   final Widget noDataTile;
   final Axis orientation;
   final EdgeInsets? padding;
@@ -15,6 +17,7 @@ class MyList<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.noDataTile,
     this.orientation = .vertical,
+    this.onDismissed,
     this.padding,
   });
 
@@ -113,11 +116,20 @@ class MyListState<T> extends State<MyList<T>> {
     }
   }
 
-  void remove(T x) {
-    listKey.currentState?.removeItem(
-      _currentlyListed.indexOf(x),
-      (ctx, anim) => widget.itemBuilder.call(x, anim),
-    );
+  void remove(T x, {DismissDirection? dismiss}) {
+    if (dismiss == null) {
+      listKey.currentState?.removeItem(
+        _currentlyListed.indexOf(x),
+        (ctx, anim) => widget.itemBuilder.call(x, anim),
+      );
+    } else {
+      listKey.currentState?.removeItem(
+        _currentlyListed.indexOf(x),
+        (ctx, anim) => deletionBackgroundCard(ctx),
+        // avoid duplicate animation when item was removed by dismiss gesture
+        duration: Duration(seconds: 0),
+      );
+    }
 
     setState(() {
       _currentlyListed.remove(x);
@@ -135,6 +147,24 @@ class MyListState<T> extends State<MyList<T>> {
     }
   }
 
+  Widget deletionBackgroundCard(BuildContext ctx) => Card(
+    color: Theme.of(ctx).colorScheme.errorContainer,
+    margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: Row(
+      spacing: 10,
+      children: [
+        SizedBox(width: 10),
+        Icon(deleteIcon, color: Theme.of(ctx).colorScheme.onErrorContainer),
+        Text(
+          'DELETE',
+          style: TextStyle(color: Theme.of(ctx).colorScheme.onErrorContainer),
+        ),
+      ],
+    ),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -148,7 +178,7 @@ class MyListState<T> extends State<MyList<T>> {
     // apply default bottom padding for floating action buttons
     EdgeInsets pad =
         widget.padding ??
-        EdgeInsets.only(bottom: MediaQuery.of(context).textScaler.scale(80));
+        EdgeInsets.only(bottom: MediaQuery.of(context).textScaler.scale(100));
 
     ScrollController controller = ScrollController();
     return _currentlyListed.isEmpty && _showNoDataView
@@ -163,8 +193,25 @@ class MyListState<T> extends State<MyList<T>> {
               initialItemCount: _showNoDataView || _currentlyListed.isEmpty
                   ? 0
                   : widget.initialItems.length,
-              itemBuilder: (ctx, index, anim) =>
-                  widget.itemBuilder.call(_currentlyListed[index], anim),
+              itemBuilder: (ctx, index, anim) => widget.onDismissed == null
+                  ? widget.itemBuilder.call(_currentlyListed[index], anim)
+                  : Dismissible(
+                      // Each Dismissible must contain a Key. Keys allow Flutter to
+                      // uniquely identify widgets.
+                      key: Key((_currentlyListed[index] as dynamic).id),
+                      // Provide a function that tells the app
+                      // what to do after an item has been swiped away.
+                      onDismissed: (direction) => widget.onDismissed?.call(
+                        _currentlyListed[index],
+                        direction,
+                      ),
+                      direction: .startToEnd,
+                      background: deletionBackgroundCard(ctx),
+                      child: widget.itemBuilder.call(
+                        _currentlyListed[index],
+                        anim,
+                      ),
+                    ),
             ),
           );
   }
