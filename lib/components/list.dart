@@ -15,7 +15,7 @@ class MyList<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.noDataTile,
     this.orientation = .vertical,
-    this.padding = const EdgeInsets.only(bottom: 100),
+    this.padding,
   });
 
   @override
@@ -145,6 +145,11 @@ class MyListState<T> extends State<MyList<T>> {
 
   @override
   Widget build(BuildContext context) {
+    // apply default bottom padding for floating action buttons
+    EdgeInsets pad =
+        widget.padding ??
+        EdgeInsets.only(bottom: MediaQuery.of(context).textScaler.scale(80));
+
     ScrollController controller = ScrollController();
     return _currentlyListed.isEmpty && _showNoDataView
         ? widget.noDataTile
@@ -154,7 +159,7 @@ class MyListState<T> extends State<MyList<T>> {
             child: AnimatedList(
               key: listKey,
               controller: controller,
-              padding: widget.padding,
+              padding: pad,
               initialItemCount: _showNoDataView || _currentlyListed.isEmpty
                   ? 0
                   : widget.initialItems.length,
