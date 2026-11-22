@@ -1,12 +1,24 @@
-import 'package:js_flutter/icons.dart';
+import 'package:js_flutter/utils/dialog_utils.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'list_view_scroll_indicator.dart';
 
+class DismissAction<T> extends DialogAction {
+  final void Function(T) onDismissed;
+
+  new({
+    required super.title,
+    super.isDestructive,
+    super.icon,
+    required this.onDismissed,
+  });
+}
+
 class MyList<T> extends StatefulWidget {
   final List<T> initialItems;
   final Widget Function(T, Animation<double>) itemBuilder;
-  final void Function(T, DismissDirection)? onDismissed;
+  final DismissAction<T>? onDismissedPrimary;
+  final DismissAction<T>? onDismissedSecondary;
   final Widget noDataTile;
   final Axis orientation;
   final EdgeInsets? padding;
@@ -17,7 +29,8 @@ class MyList<T> extends StatefulWidget {
     required this.itemBuilder,
     required this.noDataTile,
     this.orientation = .vertical,
-    this.onDismissed,
+    this.onDismissedPrimary,
+    this.onDismissedSecondary,
     this.padding,
   });
 
@@ -125,7 +138,9 @@ class MyListState<T> extends State<MyList<T>> {
     } else {
       listKey.currentState?.removeItem(
         _currentlyListed.indexOf(x),
-        (ctx, anim) => deletionBackgroundCard(ctx),
+        (ctx, anim) => dismiss == .startToEnd
+            ? dismissBackgroundCard(ctx, widget.onDismissedPrimary!)
+            : dismissBackgroundCard(ctx, widget.onDismissedSecondary!),
         // avoid duplicate animation when item was removed by dismiss gesture
         duration: Duration(seconds: 0),
       );
@@ -147,7 +162,7 @@ class MyListState<T> extends State<MyList<T>> {
     }
   }
 
-  Widget deletionBackgroundCard(BuildContext ctx) => Card(
+  Widget dismissBackgroundCard(BuildContext ctx, DialogAction action) => Card(
     color: Theme.of(ctx).colorScheme.errorContainer,
     margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
     elevation: 2,
@@ -156,10 +171,19 @@ class MyListState<T> extends State<MyList<T>> {
       spacing: 10,
       children: [
         SizedBox(width: 10),
-        Icon(deleteIcon, color: Theme.of(ctx).colorScheme.onErrorContainer),
+        Icon(
+          action.icon,
+          color: action.isDestructive
+              ? Theme.of(ctx).colorScheme.onErrorContainer
+              : Theme.of(ctx).colorScheme.onSecondaryContainer,
+        ),
         Text(
-          'DELETE',
-          style: TextStyle(color: Theme.of(ctx).colorScheme.onErrorContainer),
+          action.title.toUpperCase(),
+          style: TextStyle(
+            color: action.isDestructive
+                ? Theme.of(ctx).colorScheme.onErrorContainer
+                : Theme.of(ctx).colorScheme.onSecondaryContainer,
+          ),
         ),
       ],
     ),
@@ -193,7 +217,9 @@ class MyListState<T> extends State<MyList<T>> {
               initialItemCount: _showNoDataView || _currentlyListed.isEmpty
                   ? 0
                   : widget.initialItems.length,
-              itemBuilder: (ctx, index, anim) => widget.onDismissed == null
+              itemBuilder: (ctx, index, anim) =>
+                  widget.onDismissedPrimary == null &&
+                      widget.onDismissedSecondary == null
                   ? widget.itemBuilder.call(_currentlyListed[index], anim)
                   : Dismissible(
                       // Each Dismissible must contain a Key. Keys allow Flutter to
@@ -201,12 +227,31 @@ class MyListState<T> extends State<MyList<T>> {
                       key: Key((_currentlyListed[index] as dynamic).id),
                       // Provide a function that tells the app
                       // what to do after an item has been swiped away.
-                      onDismissed: (direction) => widget.onDismissed?.call(
-                        _currentlyListed[index],
-                        direction,
-                      ),
-                      direction: .startToEnd,
-                      background: deletionBackgroundCard(ctx),
+                      onDismissed: (direction) => direction == .startToEnd
+                          ? widget.onDismissedPrimary?.onDismissed.call(
+                              _currentlyListed[index],
+                            )
+                          : widget.onDismissedSecondary?.onDismissed.call(
+                              _currentlyListed[index],
+                            ),
+                      direction: widget.onDismissedPrimary == null
+                          ? .endToStart
+                          : widget.onDismissedSecondary == null
+                          ? .startToEnd
+                          : .horizontal,
+                      background: widget.onDismissedPrimary == null
+                          ? null
+                          : dismissBackgroundCard(
+                              ctx,
+                              widget.onDismissedPrimary!,
+                            ),
+                      secondaryBackground: widget.onDismissedSecondary == null
+                          ? null
+                          : dismissBackgroundCard(
+                              ctx,
+                              widget.onDismissedSecondary!,
+                            ),
+
                       child: widget.itemBuilder.call(
                         _currentlyListed[index],
                         anim,
