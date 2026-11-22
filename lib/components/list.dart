@@ -1,3 +1,4 @@
+import 'package:js_flutter/components/card.dart';
 import 'package:js_flutter/utils/dialog_utils.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -162,11 +163,8 @@ class MyListState<T> extends State<MyList<T>> {
     }
   }
 
-  Widget dismissBackgroundCard(BuildContext ctx, DialogAction action) => Card(
-    color: Theme.of(ctx).colorScheme.errorContainer,
-    margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-    elevation: 2,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget dismissBackgroundCard(BuildContext ctx, DialogAction action) => MyCard(
+    isDestructive: action.isDestructive,
     child: Row(
       spacing: 10,
       children: [
