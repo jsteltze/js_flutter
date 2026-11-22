@@ -11,7 +11,8 @@ extension DateTimeX on DateTime {
   String toHumanDate() => DateFormat.yMMMd().format(this);
 
   String toDayDiff() {
-    int diff = DateTime.now().difference(this).inDays;
+    final duration = DateTime.now().difference(this);
+    int diff = (duration.inMicroseconds / Duration.microsecondsPerDay).ceil();
     if (diff == 0) {
       return 'today';
     } else if (diff == 1) {
