@@ -121,8 +121,10 @@ class MyListState<T> extends State<MyList<T>> {
   }
 
   void edit(T x) {
-    var id = (x as dynamic).id;
-    int editIndex = _currentlyListed.indexWhere((i) => (i as dynamic).id == id);
+    var id = (x as dynamic).id.toString();
+    int editIndex = _currentlyListed.indexWhere(
+      (i) => (i as dynamic).id.toString() == id,
+    );
     if (mounted) {
       setState(() {
         _currentlyListed[editIndex] = x;
@@ -222,7 +224,9 @@ class MyListState<T> extends State<MyList<T>> {
                   : Dismissible(
                       // Each Dismissible must contain a Key. Keys allow Flutter to
                       // uniquely identify widgets.
-                      key: Key((_currentlyListed[index] as dynamic).id),
+                      key: Key(
+                        (_currentlyListed[index] as dynamic).id.toString(),
+                      ),
                       // Provide a function that tells the app
                       // what to do after an item has been swiped away.
                       onDismissed: (direction) => direction == .startToEnd
