@@ -28,7 +28,7 @@ class DialogAction {
   });
 }
 
-void openDialog(
+Future<int> openDialog(
   BuildContext context, {
   String? title,
   required Widget Function(
@@ -43,11 +43,11 @@ void openDialog(
   List<DialogAction>? secondaryActions,
   String? closeButtonTitle = 'Cancel',
   bool? mainActionEnabled = true,
-}) {
+}) async {
   bool mainActionIsEnabled = mainActionEnabled!;
   void toggleMainAction(bool enabled) => mainActionIsEnabled = enabled;
 
-  showDialog(
+  return await showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -71,7 +71,7 @@ void openDialog(
           actions: <Widget>[
             if (closeButtonTitle != null)
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.of(context).pop(0),
                 child: Text(closeButtonTitle),
               ),
             ...?secondaryActions?.map(
@@ -89,7 +89,10 @@ void openDialog(
             if (mainAction != null)
               ElevatedButton.icon(
                 onPressed: mainActionIsEnabled
-                    ? () => mainAction.onPressed?.call(setDialogState)
+                    ? () {
+                        Navigator.of(context).pop(1);
+                        mainAction.onPressed?.call(setDialogState);
+                      }
                     : null,
                 style: TextButton.styleFrom(
                   backgroundColor: mainAction.isDestructive
