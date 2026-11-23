@@ -6,12 +6,14 @@ import 'list_view_scroll_indicator.dart';
 
 class DismissAction<T> extends DialogAction {
   final void Function(T) onDismissed;
+  final Future<bool?> Function(T)? confirmDismiss;
 
   new({
     required super.title,
     super.isDestructive,
     super.icon,
     required this.onDismissed,
+    this.confirmDismiss,
   });
 }
 
@@ -236,6 +238,22 @@ class MyListState<T> extends State<MyList<T>> {
                           : widget.onDismissedSecondary?.onDismissed.call(
                               _currentlyListed[index],
                             ),
+                      confirmDismiss: (direction) async {
+                        if (direction == .startToEnd) {
+                          return widget.onDismissedPrimary!.confirmDismiss ==
+                                  null
+                              ? true
+                              : widget.onDismissedPrimary!.confirmDismiss!.call(
+                                  _currentlyListed[index],
+                                );
+                        } else {
+                          return widget.onDismissedSecondary!.confirmDismiss ==
+                                  null
+                              ? true
+                              : widget.onDismissedSecondary!.confirmDismiss!
+                                    .call(_currentlyListed[index]);
+                        }
+                      },
                       direction: widget.onDismissedPrimary == null
                           ? .endToStart
                           : widget.onDismissedSecondary == null
