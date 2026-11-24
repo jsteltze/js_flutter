@@ -1,6 +1,6 @@
 name: js_flutter
 description: "common flutter components/functions which can be used in multiple projects"
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/jsteltze/js_flutter
 
 environment:
@@ -11,10 +11,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^2.0.0
-  expandable_search_bar_plus: ^1.0.2
   file_saver: ^0.7.0
   intl: ^0.20.2
   logger: ^2.6.2

@@ -1,4 +1,4 @@
-import 'package:expandable_search_bar_plus/expandable_search_bar_plus.dart';
+import 'package:js_flutter/components/expandable_searchbar_plus/expandable_search_bar_plus.dart';
 import 'package:material_ui/material_ui.dart';
 
 class SearchField extends StatefulWidget {
