@@ -19,7 +19,7 @@ class DismissAction<T> extends DialogAction {
 
 class MyList<T> extends StatefulWidget {
   final List<T> initialItems;
-  final Widget Function(T, Animation<double>) itemBuilder;
+  final Widget Function(T) itemBuilder;
   final DismissAction<T>? onDismissedPrimary;
   final DismissAction<T>? onDismissedSecondary;
   final Widget noDataTile;
@@ -75,10 +75,7 @@ class MyListState<T> extends State<MyList<T>> {
       for (int i = 0; i < _currentlyListed.length; i++) {
         if (!filtered.contains(_currentlyListed[i])) {
           T item = _currentlyListed[i];
-          listKey.currentState?.removeItem(
-            i,
-            (_, anim) => widget.itemBuilder.call(item, anim),
-          );
+          listKey.currentState?.removeItem(i, (_, anim) => child(item, anim));
           _currentlyListed.removeAt(i--);
         }
       }
@@ -138,7 +135,7 @@ class MyListState<T> extends State<MyList<T>> {
     if (dismiss == null) {
       listKey.currentState?.removeItem(
         _currentlyListed.indexOf(x),
-        (ctx, anim) => widget.itemBuilder.call(x, anim),
+        (ctx, anim) => child(x, anim),
       );
     } else {
       listKey.currentState?.removeItem(
@@ -191,6 +188,12 @@ class MyListState<T> extends State<MyList<T>> {
     ),
   );
 
+  Widget child(T item, Animation<double> anim) => SizeTransition(
+    key: ValueKey((item as dynamic).id.toString()),
+    sizeFactor: anim,
+    child: widget.itemBuilder.call(item),
+  );
+
   @override
   void initState() {
     super.initState();
@@ -222,7 +225,7 @@ class MyListState<T> extends State<MyList<T>> {
               itemBuilder: (ctx, index, anim) =>
                   widget.onDismissedPrimary == null &&
                       widget.onDismissedSecondary == null
-                  ? widget.itemBuilder.call(_currentlyListed[index], anim)
+                  ? child(_currentlyListed[index], anim)
                   : Dismissible(
                       // Each Dismissible must contain a Key. Keys allow Flutter to
                       // uniquely identify widgets.
@@ -272,10 +275,7 @@ class MyListState<T> extends State<MyList<T>> {
                               widget.onDismissedSecondary!,
                             ),
 
-                      child: widget.itemBuilder.call(
-                        _currentlyListed[index],
-                        anim,
-                      ),
+                      child: child(_currentlyListed[index], anim),
                     ),
             ),
           );
