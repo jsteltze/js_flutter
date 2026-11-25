@@ -116,9 +116,10 @@ class MyListState<T> extends State<MyList<T>> {
     }
   }
 
-  void insert(T x) {
-    listKey.currentState?.insertItem(0);
-    _currentlyListed.insert(0, x);
+  void insert(T x, {int? index}) {
+    final int i = index ?? 0;
+    listKey.currentState?.insertItem(i);
+    _currentlyListed.insert(i, x);
   }
 
   void edit(T x) {
