@@ -1,21 +1,51 @@
 import 'package:material_ui/material_ui.dart';
 
 class ViewHeader extends StatelessWidget {
-  final Widget header;
-  final List<Widget>? extension;
+  final List<Widget>? headerWidgets;
+  final String headerTitle;
+  final Icon? headerIcon;
+  final List<Widget>? extensionWidgets;
+  final List<Widget>? otherWidgets;
   final EdgeInsetsGeometry? padding;
+  final void Function(bool value)? onExpansionChanged;
 
-  const ViewHeader(this.header, {this.padding, this.extension, super.key});
+  const ViewHeader({
+    required this.headerTitle,
+    this.headerWidgets,
+    this.headerIcon,
+    this.padding,
+    this.extensionWidgets,
+    this.otherWidgets,
+    this.onExpansionChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Widget child = extension == null
-        ? header
-        : ExpansionTile(
-            title: header,
-            shape: const Border(),
-            children: extension!,
-          );
+    Widget child = ExpansionTile(
+      title: Row(
+        spacing: 10,
+        children: [
+          ?headerIcon,
+          Container(
+            padding: .only(top: 3),
+            child: Text(
+              headerTitle,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: .normal,
+              ),
+            ),
+          ),
+          ...?headerWidgets,
+        ],
+      ),
+      onExpansionChanged: onExpansionChanged,
+      shape: const Border(),
+      children: extensionWidgets == null
+          ? []
+          : [Divider(), ...?extensionWidgets],
+    );
 
     return Ink(
       width: .infinity,
@@ -27,7 +57,9 @@ class ViewHeader extends StatelessWidget {
         ),
         borderRadius: .vertical(bottom: .circular(20)),
       ),
-      child: child,
+      child: otherWidgets == null
+          ? child
+          : Column(children: [child, ...?otherWidgets]),
     );
   }
 }
