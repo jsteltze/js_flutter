@@ -8,12 +8,14 @@ class MyBadge extends StatelessWidget {
   final Icon? icon;
   final BadgeVariant variant;
   final Color? background;
+  final int maxLines;
 
   const MyBadge(
     this.text, {
     this.child,
     this.icon,
     this.background,
+    this.maxLines = 1,
     BadgeVariant? variant,
     super.key,
   }) : variant = variant ?? .secondary;
@@ -38,7 +40,7 @@ class MyBadge extends StatelessWidget {
                     child: Text(
                       text,
                       style: st,
-                      maxLines: 1,
+                      maxLines: maxLines,
                       overflow: .ellipsis,
                     ),
                   ),
