@@ -10,7 +10,7 @@ class Warning extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.errorContainer,
+        color: Theme.of(context).colorScheme.errorContainer.withAlpha(100),
         border: BoxBorder.all(
           color: Theme.of(context).colorScheme.error.withAlpha(50),
         ),
