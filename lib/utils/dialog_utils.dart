@@ -47,7 +47,7 @@ Future<int> openDialog(
   bool mainActionIsEnabled = mainActionEnabled!;
   void toggleMainAction(bool enabled) => mainActionIsEnabled = enabled;
 
-  return await showDialog(
+  int? result = await showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -97,11 +97,8 @@ Future<int> openDialog(
                 style: TextButton.styleFrom(
                   backgroundColor: mainAction.isDestructive
                       ? Theme.of(context).colorScheme.errorContainer
-                      : Theme.of(context).colorScheme.primary.withAlpha(
-                          mainAction.onPressed == null || !mainActionIsEnabled
-                              ? 30
-                              : 255,
-                        ),
+                      : Theme.of(context).colorScheme.primary
+                            .withAlpha(!mainActionIsEnabled ? 30 : 255),
                   foregroundColor: mainAction.isDestructive
                       ? Theme.of(context).colorScheme.error
                       : Theme.of(context).colorScheme.onPrimary,
@@ -114,6 +111,7 @@ Future<int> openDialog(
       );
     },
   );
+  return result ?? 0;
 }
 
 void showLogsDialog(BuildContext context) {
@@ -127,21 +125,13 @@ void showLogsDialog(BuildContext context) {
       style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
     ),
     closeButtonTitle: null,
-    mainAction: DialogAction(
-      title: 'Close',
-      onPressed: (_) => Navigator.pop(context),
-    ),
+    mainAction: DialogAction(title: 'Close'),
     secondaryActions: [
       DialogAction(
         title: 'Export',
         onPressed: (_) {
           final filename = 'logs-${DateTime.now().toTechString()}.txt';
-          ExportHandler.exportToDownloads(
-            context,
-            filename,
-            logs,
-            () => Navigator.pop(context),
-          );
+          ExportHandler.exportToDownloads(context, filename, logs);
         },
         icon: exportIcon,
       ),
@@ -150,7 +140,6 @@ void showLogsDialog(BuildContext context) {
         onPressed: (_) {
           FileLogger.clearLogs();
           showSnackbar(context, 'Logs removed');
-          Navigator.pop(context);
         },
         isDestructive: true,
         icon: deleteIcon,
@@ -189,10 +178,7 @@ void showWelcomeDialog(
         Text(message, textAlign: .center),
       ],
     ),
-    mainAction: DialogAction(
-      title: 'Get Started',
-      onPressed: (_) => Navigator.pop(context),
-    ),
+    mainAction: DialogAction(title: 'Get Started'),
     closeButtonTitle: null,
   );
 }
