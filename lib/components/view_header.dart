@@ -3,15 +3,9 @@ import 'package:material_ui/material_ui.dart';
 class ViewHeader extends StatelessWidget {
   final Widget header;
   final List<Widget>? extension;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
-  const ViewHeader(
-    this.header, {
-    EdgeInsetsGeometry? padding,
-    this.extension,
-    super.key,
-  }) : padding =
-           padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8);
+  const ViewHeader(this.header, {this.padding, this.extension, super.key});
 
   @override
   Widget build(BuildContext context) {
