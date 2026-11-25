@@ -163,9 +163,9 @@ void showErrorDialog(BuildContext context, String msg) {
 
 void showWelcomeDialog(
   BuildContext context,
+  String message, {
   IconData? titleIcon,
-  String message,
-) {
+}) {
   openDialog(
     context,
     title: 'Welcome!',
