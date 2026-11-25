@@ -22,6 +22,7 @@ class MyList<T> extends StatefulWidget {
   final Widget Function(T) itemBuilder;
   final DismissAction<T>? onDismissedPrimary;
   final DismissAction<T>? onDismissedSecondary;
+  final Widget? Function(int)? separatorBuilder;
   final Widget noDataTile;
   final Axis orientation;
   final EdgeInsets? padding;
@@ -34,6 +35,7 @@ class MyList<T> extends StatefulWidget {
     this.orientation = .vertical,
     this.onDismissedPrimary,
     this.onDismissedSecondary,
+    this.separatorBuilder,
     this.padding,
   });
 
@@ -215,7 +217,7 @@ class MyListState<T> extends State<MyList<T>> {
         : ListViewScrollIndicator(
             controller: controller,
             scrollDirection: widget.orientation,
-            child: AnimatedList(
+            child: AnimatedList.separated(
               key: listKey,
               controller: controller,
               padding: pad,
@@ -277,6 +279,24 @@ class MyListState<T> extends State<MyList<T>> {
 
                       child: child(_currentlyListed[index], anim),
                     ),
+              separatorBuilder: (context, index, animation) {
+                if (widget.separatorBuilder == null) {
+                  return const SizedBox.shrink();
+                }
+                Widget? separator = widget.separatorBuilder?.call(index);
+                return separator == null
+                    ? SizedBox.shrink()
+                    : SizeTransition(sizeFactor: animation, child: separator);
+              },
+              removedSeparatorBuilder: (context, index, animation) {
+                if (widget.separatorBuilder == null) {
+                  return const SizedBox.shrink();
+                }
+                Widget? separator = widget.separatorBuilder?.call(index);
+                return separator == null
+                    ? SizedBox.shrink()
+                    : SizeTransition(sizeFactor: animation, child: separator);
+              },
             ),
           );
   }
