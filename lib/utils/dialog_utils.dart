@@ -89,10 +89,7 @@ Future<int> openDialog(
             if (mainAction != null)
               ElevatedButton.icon(
                 onPressed: mainActionIsEnabled
-                    ? () {
-                        Navigator.of(context).pop(1);
-                        mainAction.onPressed?.call(setDialogState);
-                      }
+                    ? () => mainAction.onPressed?.call(setDialogState)
                     : null,
                 style: TextButton.styleFrom(
                   backgroundColor: mainAction.isDestructive
@@ -130,6 +127,7 @@ void showLogsDialog(BuildContext context) {
       DialogAction(
         title: 'Export',
         onPressed: (_) {
+          Navigator.of(context).pop(1);
           final filename = 'logs-${DateTime.now().toTechString()}.txt';
           ExportHandler.exportToDownloads(context, filename, logs);
         },
@@ -178,7 +176,10 @@ void showWelcomeDialog(
         Text(message, textAlign: .center),
       ],
     ),
-    mainAction: DialogAction(title: 'Get Started'),
+    mainAction: DialogAction(
+      title: 'Get Started',
+      onPressed: (_) => Navigator.of(context).pop(1),
+    ),
     closeButtonTitle: null,
   );
 }
